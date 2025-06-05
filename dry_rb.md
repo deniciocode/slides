@@ -66,6 +66,7 @@ user.age  # 21
 
 - Type-safe input handling
 - Immutable data
+- Value-based equality
 - Clear contracts between components
 
 ---
