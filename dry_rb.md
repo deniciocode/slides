@@ -133,8 +133,6 @@ result = contract.call(email: 'user@example.com', age: 20)
 
 # `dry-transaction`
 
-### Example
-
 ```ruby
 class CreateSomething
   include Dry::Transaction
@@ -144,12 +142,18 @@ class CreateSomething
 
   def prepare_talk(ctx)
     # return Failure(ctx) or Success(ctx)
+    Success(ctx.merge(prepared: true))
   end
 
-  def notify_rug_b
+  def notify_rug_b(ctx)
     # ...
+    Success(ctx.merge(notified: true))
   end
 end
+
+result = CreateSomething.new.call(title: "Dry.rb Talk")
+puts result.success? # true
+puts result.value!   # {:title=>"Dry.rb Talk", :prepared=>true, :notified=>true}
 ```
 
 ---
