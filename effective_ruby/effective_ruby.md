@@ -1,6 +1,6 @@
 ---
 marp: true
-theme: default
+theme: gaia
 paginate: true
 ---
 
@@ -27,7 +27,7 @@ Talk by `Dennis Hägler`
 
 ---
 
-# Content of the talk
+# Removed Topics
 
 - Basics
 - Classes, Objects and Modules
@@ -40,17 +40,36 @@ Talk by `Dennis Hägler`
 
 ---
 
-# Basics
+# Content for today
 
-## What is True in Ruby?
-
-- everything besides `false` and `nil`
+- Basics
+- Classes, Objects and Modules
+- ~~Collections~~ -> `Next Talk`
+- ~~Exceptions~~ -> `Next Talk`
+- ~~Metaprogramming~~
+- ~~Testing~~
+- ~~Tools and Libraries~~ -> `Next Talk`
+- ~~Memory Management and Performance~~ -> `Stand Alone Talk`
 
 ---
 
 # Basics
 
-## Consider what is True in Ruby?
+---
+
+### What is True in Ruby?
+
+---
+
+### What is True in Ruby?
+
+- everything besides `false` and `nil`
+
+---
+
+### What is True in Ruby?
+
+- everything besides `false` and `nil`
 
 ```ruby
 true == 1 # => false
@@ -59,9 +78,14 @@ true == 1 # => false
 
 ---
 
-# Basics
+### What is True in Ruby?
 
-## Consider what is True in Ruby?
+- everything besides `false` and `nil`
+
+```ruby
+true == 1 # => false
+1 == true # => false
+```
 
 ```ruby
 if 0
@@ -71,22 +95,22 @@ end
 
 ---
 
-# Basics
+### Treat All `object`s as If they Could be `nil`
 
-## Treat All Objects as If they Could be `nil`
+---
 
-- any object can be `nil`
+### Treat All `object`s as If they Could be `nil`
+
+- any `object` can be `nil`
 - use `nil?`
 - use conversion methods (`to_s`, `to_i`)
 - use `Array#compact`
 
 ---
 
-# Basics
+### Treat All `object`s as If they Could be `nil`
 
-## Treat All Objects as If they Could be `nil`
-
-- any object can be `nil`
+- any `object` can be `nil`
 
 ```ruby
 person.save if person
@@ -95,11 +119,9 @@ person.save unless person.nil?
 
 ---
 
-# Basics
+### Treat All `object`s as If they Could be `nil`
 
-## Treat All Objects as If they Could be `nil`
-
-- any object can be `nil`
+- any `object` can be `nil`
 
 ```ruby
 person.save if person
@@ -112,9 +134,7 @@ person&.save # since 2.3.0
 
 ---
 
-# Basics
-
-## Treat All Objects as If they Could be `nil`
+### Treat All `object`s as If they Could be `nil`
 
 - use `nil?`
   - `nil.nil? # => true`
@@ -127,23 +147,17 @@ person&.save # since 2.3.0
 
 ---
 
-# Basics
-
-## Avoid cryptic Perlisms
+### Avoid cryptic Perlisms
 
 ---
 
-# Basics
-
-## Avoid cryptic Perlisms
+### Avoid cryptic Perlisms
 
 - Ruby uses special global vars `$`
 
 ---
 
-# Basics
-
-## Avoid cryptic Perlisms
+### Avoid cryptic Perlisms
 
 - `$~ ($LAST_MATCH_INFO)`The information about the last match in the current scope (thread-local and frame-local).
 - `$& ($MATCH)` The string matched by the last successful match.
@@ -152,9 +166,7 @@ person&.save # since 2.3.0
 
 ---
 
-# Basics
-
-## Avoid cryptic Perlisms
+### Avoid cryptic Perlisms
 
 ```ruby
 "Hello World!" =~ /e(llo) (\w+)rl/
@@ -171,9 +183,7 @@ puts $3 # => nil
 
 ---
 
-# Basics
-
-## Avoid cryptic Perlisms
+### Avoid cryptic Perlisms
 
 - use `String#match`
 
@@ -184,24 +194,18 @@ puts m[1] # => llo
 
 ---
 
-# Basics
-
-## Constants Are Mutable
+### Constants Are Mutable
 
 ---
 
-# Basics
-
-## Constants Are Mutable
+### Constants Are Mutable
 
 - Constants are actually identifiers
 - class names are identifiers and so constants
 
 ---
 
-# Basics
-
-## Constants Are Mutable
+### Constants Are Mutable
 
 ```ruby
 class Testing
@@ -217,9 +221,7 @@ puts Testing::CONSTANT# => ['123']
 
 ---
 
-# Basics
-
-## Constants Are Mutable
+### Constants Are Mutable
 
 ```ruby
 class Testing
@@ -233,9 +235,7 @@ Testing::CONSTANT.delete_if {|test| test.to_i.zero?}
 
 ---
 
-# Basics
-
-## Constants Are Mutable
+### Constants Are Mutable
 
 ```ruby
 class Testing
@@ -249,9 +249,7 @@ puts Testing::CONSTANT # => 'ja moin'
 
 ---
 
-# Basics
-
-## Constants Are Mutable
+### Constants Are Mutable
 
 ```ruby
 class Testing
@@ -267,9 +265,7 @@ Testing::CONSTANT = 'ja moin'
 
 ---
 
-# Basics
-
-## Pay Attention to Run-Time Warning
+### Pay Attention to Run-Time Warning
 
 ```ruby
 class Testing
@@ -281,9 +277,7 @@ Testing::CONSTANT = 'ja moin'
 
 ---
 
-# Basics
-
-## Pay Attention to Run-Time Warning
+### Pay Attention to Run-Time Warning
 
 ```ruby
 class Testing
@@ -302,56 +296,44 @@ Testing::CONSTANT = 'ja moin'
 
 ---
 
-# Classes, Objects and Modules
+#### Object
 
-- everything in ruby is an object
-- classes are also objects
-- subclasses not intializing their subclasses automatically
-
----
-
-# Classes, Objects and Modules
-
-## Know how Ruby Builds Inheritance Hierachies
-
-- ruby interpreter internally builds the instance hierachy
-  - consistent and straightforward
+- instance of a class
+- container of variables
+  - as **instance variables**
+  - state of an `object`
+- special internal variable to "class type"
 
 ---
 
-# Classes, Objects and Modules
+#### Class
 
-## Know how Ruby Builds Inheritance Hierachies
-
-- object is a Container of Variables
-  - Referred as instance variables
-  - Represent a state of an object
-- has a special internal variable that connects to the one class
-  - to say instance of this class
-
----
-
-# Classes, Objects and Modules
-
-## Know how Ruby Builds Inheritance Hierachies
-
-- a class is a container of methods and constants
-  - referred as instance methods
-  - represent the behavior of the object
-
----
-
-# Classes, Objects and Modules
-
-## Know how Ruby Builds Inheritance Hierachies
-
-- classes are also objects with variables and methods
-  - class method
-  - class variable
-- a class is an object(instance) of the class `Class`
+- a class is a **container** of methods and constants
+  - referred as **instance methods**
+  - behavior of the `object`
 
 ```ruby
 class MyClass
+  def instance_method
+  end
+end
+
+MyClass.new.class # => MyClass
+```
+
+---
+
+#### Classes are also Objects
+
+- with variables and methods
+  - class method
+  - class variable
+- instance of the class `Class`
+
+```ruby
+class MyClass
+  def self.class_method
+  end
 end
 
 MyClass.class # => Class
@@ -359,13 +341,344 @@ MyClass.class # => Class
 
 ---
 
-# Classes, Objects and Modules
+### Inheritance Hierarchy of classes
 
-## Know how Ruby Builds Inheritance Hierachies
+- consistent and straightforward
 
-- Modules identical to classes
-  - classes are instances of `Class`
-  - modules are instances of `Module`
+```ruby
+class Parent
+end
+
+class Child < Parent
+end
+
+Child.superclass # => Parent
+Parent.superclass # => Object
+Object.superclass # => BasicObject
+BasicObject.superclass # => nil
+```
+
+---
+
+### Inheritance Hierarchy of classes
+
+- consistent and straightforward
+
+```ruby
+class Parent
+end
+
+class Child < Parent
+end
+```
+
+![auto](./hierarchy.png)
+
+---
+
+### Modules
+
+- identical to classes
 - same data structure as class
-- limited in usage through class methods (no `new`)
+- instance of `Module` not `Class`
+- no `.new` method
 - can be mixed into classes with `include`
+
+---
+
+### include(ModuleExample)
+
+- create singleton class
+- insert into the class hierarchy as anonymous and invisible class
+- connected through `superclass` variable
+- Last In First Out (LIFO)
+
+```ruby
+class MyClass
+  include(MyModule)
+end
+```
+
+---
+
+### Method lookup
+
+- when searching for a method
+- most recently included
+- look up each module in reversed order
+- modules can never override method from a class
+
+---
+
+### Method lookup classes and modules
+
+```ruby
+module MyModule
+end
+
+class Parent
+end
+
+class Child < Parent
+  include(MyModule)
+end
+```
+
+![auto](./modules.png)
+
+---
+
+## super != super()
+
+---
+
+### What does `super`?
+
+- calls a method in the **superclass** by **same name**
+
+---
+
+### The way of super
+
+- stops at first found method
+  ![auto](./modules.png)
+
+---
+
+### Different super
+
+- `super` → forwards all original args
+- `super()` → forwards no args
+- `super(custom_args)` → forwards only what you specify
+
+---
+
+## Use super to initialize data on subclass
+
+---
+
+### No Super, No Data
+
+```ruby
+class Parent
+  attr_reader :name
+
+  def initialize
+    @name = 'RUG::B'
+  end
+end
+
+class Child < Parent
+  attr_reader :month
+
+  def initialize
+    @month = 13
+  end
+end
+
+Child.new.name # => nil
+```
+
+---
+
+## Prefer Struct to Hash
+
+---
+
+### Usage of Hash
+
+- access via keyword
+- typos result in nil
+
+```ruby
+event = {name: 'RUG::B', month: 13}
+puts event[:name] # => 'RUG::B'
+puts event['name'] # => nil
+puts event[:nay] # => nil
+```
+
+---
+
+### Usage of Struct
+
+- access via method
+- typos result in `NoMethodError`
+
+```ruby
+Event = Struct.new(:name, :month)
+event = Event.new('RUG::B', 13)
+puts event.name # => 'RUG::B'
+puts event.nay # => NoMethodError
+```
+
+---
+
+## Use modules as Namespaces
+
+- avoid `monkey patching` by accident
+
+```ruby
+class Integer
+  def to_s
+    raise(RuntimeError)
+  end
+end
+
+puts 1 # => RuntimeError
+```
+
+---
+
+## equal? is not equal to eql?
+
+---
+
+### equal?
+
+- used to compare object
+- `true` if point to same object in memory
+- DO NOT override
+
+---
+
+### eql?
+
+- used by Hash when objects used as keys
+- default implementation is not helpful
+  - do alias on `==` after comparison is implemented
+
+---
+
+### `==`
+
+- used by objects to represent same value
+- needs custom implementation
+
+### `===`
+
+- used in `when` clause
+
+---
+
+## Compare by the spaceship operator
+
+---
+
+## Compare by the spaceship operator
+
+```ruby
+class Child < Parent
+  attr_reader :month
+
+  def initialize(month)
+    super()
+    @month = month
+  end
+
+  def <=>(other)
+    return nil unless other.is_a?(Child)
+    self.month <=> other.month
+  end
+end
+
+c1 = Child.new(12)
+c2 = Child.new(13)
+[c2, c1].sort
+```
+
+---
+
+## Share private state through `protected`
+
+---
+
+## Share private state through `protected`
+
+```ruby
+class Parent
+  ...
+
+  private
+
+  attr_reader :name
+end
+
+class Child < Parent
+  def something(other_child)
+    other_child.name
+  end
+end
+```
+
+---
+
+## Share private state through `protected`
+
+```ruby
+Child.new.something(Child.new)
+```
+
+`private method 'name' called for an instance of Child`
+
+---
+
+## Share private state through `protected`
+
+```ruby
+class Parent
+  ...
+
+  protected
+
+  attr_reader :name
+end
+
+class Child < Parent
+  def something(other_child)
+    other_child.name
+  end
+end
+```
+
+---
+
+## Share private state through `protected`
+
+```ruby
+Child.new.something(Child.new)
+
+Child.new.name
+```
+
+`protected method 'name' called for an instance of Child`
+
+---
+
+## Avoid class variables
+
+---
+
+## Avoid class variables
+
+```ruby
+class Parent
+  def initialize
+    @@name = 'RUG::B'
+  end
+
+  def name
+    @@name
+  end
+end
+
+class Child < Parent
+  def initialize
+    @@name = 'Go Meetup'
+  end
+end
+
+p = Parent.new
+Child.new
+
+p.name # => 'Go Meetup'
+```
