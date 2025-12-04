@@ -8,7 +8,7 @@ paginate: true
 
 ### Ruby User Group Berlin
 
-#### Dezember 2025
+#### December 2025
 
 Talk by `Dennis Hägler`
 
@@ -212,11 +212,11 @@ class Testing
   CONSTANT = ['123', 'abc']
 end
 
-puts Testing::CONSTANT # => ['123', 'abc']
+Testing::CONSTANT # => ['123', 'abc']
 
 Testing::CONSTANT.delete_if {|test| test.to_i.zero?}
 
-puts Testing::CONSTANT# => ['123']
+Testing::CONSTANT # => ['123']
 ```
 
 ---
@@ -365,11 +365,10 @@ BasicObject.superclass # => nil
 - consistent and straightforward
 
 ```ruby
-class Parent
-end
-
-class Child < Parent
-end
+Child.superclass # => Parent
+Parent.superclass # => Object
+Object.superclass # => BasicObject
+BasicObject.superclass # => nil
 ```
 
 ![auto](./hierarchy.png)
@@ -447,13 +446,21 @@ end
 
 ### Different super
 
+- `super`
+- `super()`
+- `super(custom_args)`
+
+---
+
+### Different super
+
 - `super` → forwards all original args
 - `super()` → forwards no args
 - `super(custom_args)` → forwards only what you specify
 
 ---
 
-## Use super to initialize data on subclass
+## Initialize data on superclass
 
 ---
 
@@ -472,11 +479,32 @@ class Child < Parent
   attr_reader :month
 
   def initialize
-    @month = 13
+    @month = 12
   end
 end
 
 Child.new.name # => nil
+```
+
+---
+
+### Use correct super
+
+```ruby
+class Parent
+  ...
+end
+
+class Child < Parent
+  attr_reader :month
+
+  def initialize
+    super() # use correct super
+    @month = 12
+  end
+end
+
+Child.new.name # => 'RUG::B'
 ```
 
 ---
@@ -491,10 +519,10 @@ Child.new.name # => nil
 - typos result in nil
 
 ```ruby
-event = {name: 'RUG::B', month: 13}
-puts event[:name] # => 'RUG::B'
-puts event['name'] # => nil
-puts event[:nay] # => nil
+event = {name: 'RUG::B', month: 12}
+event[:name] # => 'RUG::B'
+event['name'] # => nil
+event[:nay] # => nil
 ```
 
 ---
@@ -506,9 +534,9 @@ puts event[:nay] # => nil
 
 ```ruby
 Event = Struct.new(:name, :month)
-event = Event.new('RUG::B', 13)
-puts event.name # => 'RUG::B'
-puts event.nay # => NoMethodError
+event = Event.new('RUG::B', 12)
+event.name # => 'RUG::B'
+event.nay # => NoMethodError
 ```
 
 ---
@@ -533,9 +561,18 @@ puts 1 # => RuntimeError
 
 ---
 
+## equal? is not equal to eql?
+
+- `equal?`
+- `eql?`
+- `==`
+- `===`
+
+---
+
 ### equal?
 
-- used to compare object
+- used to compare objects
 - `true` if point to same object in memory
 - DO NOT override
 
@@ -544,8 +581,7 @@ puts 1 # => RuntimeError
 ### eql?
 
 - used by Hash when objects used as keys
-- default implementation is not helpful
-  - do alias on `==` after comparison is implemented
+- subclass that overrides `eql?` should also override `hash` appropriately.
 
 ---
 
@@ -553,10 +589,12 @@ puts 1 # => RuntimeError
 
 - used by objects to represent same value
 - needs custom implementation
+  - can be done with `Comparable`
 
 ### `===`
 
 - used in `when` clause
+- needs custom implementation
 
 ---
 
@@ -564,7 +602,19 @@ puts 1 # => RuntimeError
 
 ---
 
-## Compare by the spaceship operator
+## `<=>`
+
+- should return: -1, 0, 1 or nil.
+
+---
+
+## `<=>`
+
+- should return: -1, 0, 1 or nil.
+- include `Comparable` to gain the methods
+  - `<=`, `<`, `==`, `#>=`, `>` and `between?`
+
+---
 
 ```ruby
 class Child < Parent
@@ -577,12 +627,14 @@ class Child < Parent
 
   def <=>(other)
     return nil unless other.is_a?(Child)
+
     self.month <=> other.month
   end
 end
 
-c1 = Child.new(12)
-c2 = Child.new(13)
+c1 = Child.new(11)
+c2 = Child.new(12)
+
 [c2, c1].sort
 ```
 
@@ -592,7 +644,18 @@ c2 = Child.new(13)
 
 ---
 
-## Share private state through `protected`
+### Typical OOP meaning of `protected`
+
+- accessible in the class and subclasses
+
+---
+
+### Ruby's meaning of `protected`
+
+- accessible in the class and subclasses
+- **accessible on any instance of the same class or subclass**
+
+---
 
 ```ruby
 class Parent
@@ -612,8 +675,6 @@ end
 
 ---
 
-## Share private state through `protected`
-
 ```ruby
 Child.new.something(Child.new)
 ```
@@ -621,8 +682,6 @@ Child.new.something(Child.new)
 `private method 'name' called for an instance of Child`
 
 ---
-
-## Share private state through `protected`
 
 ```ruby
 class Parent
@@ -642,8 +701,6 @@ end
 
 ---
 
-## Share private state through `protected`
-
 ```ruby
 Child.new.something(Child.new)
 
@@ -658,7 +715,17 @@ Child.new.name
 
 ---
 
-## Avoid class variables
+### What are class variables
+
+- start with `@@`
+- shared across all instances of the class.
+- shared across all subclasses.
+- initialized once
+  - changes anywhere affect everywhere.
+
+**Can easily lead to unexpected behaviour**
+
+---
 
 ```ruby
 class Parent
@@ -682,3 +749,13 @@ Child.new
 
 p.name # => 'Go Meetup'
 ```
+
+---
+
+# Effective Ruby
+
+### Ruby User Group Berlin
+
+#### December 2025
+
+Talk by `Dennis Hägler`
